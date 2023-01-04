@@ -14,10 +14,13 @@ import {
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addTocart } from "../feature/cart-slice";
 
 export default function Home() {
   const theme = useTheme();
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch()
 
   async function fetchAllProducts() {
     const response = await fetch("https://fakestoreapi.com/products");
@@ -28,6 +31,12 @@ export default function Home() {
   useEffect(() => {
     fetchAllProducts();
   }, []);
+
+
+
+  function addProductToCart(product){
+    dispatch(addTocart({product, quantity:1}));
+  }
 
   return (
     <Container sx={{ py: 8 }} maxWidth="lg">
@@ -58,8 +67,8 @@ export default function Home() {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
-                    "-webkit-line-clamp": "1",
-                    "-webkit-box-orient": "vertical",
+                    WebkitLineClamp: "1",
+                    WebkitBoxOrient: "vertical",
                   }}
                 >
                   {title}
@@ -71,8 +80,8 @@ export default function Home() {
                     overflow: "hidden",
                     textOverflow: "ellipsis",
                     display: "-webkit-box",
-                    "-webkit-line-clamp": "2",
-                    "-webkit-box-orient": "vertical",
+                    WebkitLineClamp: "2",
+                    WebkitBoxOrient: "vertical",
                   }}
                 >
                   {description}
@@ -83,7 +92,19 @@ export default function Home() {
                 <Rating readOnly precision={0.5} value={rating.rate} />
               </CardContent>
               <CardActions sx={{ alignSelf: "center" }}>
-                <Button variant="contained">
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    addProductToCart({
+                      title,
+                      id,
+                      price,
+                      description,
+                      rating,
+                      image,
+                    })
+                  }
+                >
                   <ShoppingCartSharp /> Add to cart
                 </Button>
               </CardActions>

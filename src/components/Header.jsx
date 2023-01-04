@@ -1,8 +1,13 @@
 import { AppBar, Badge, Box, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import React from "react";
 import ShoppingCartSharpIcon from "@mui/icons-material/ShoppingCartSharp";
+import { useSelector } from "react-redux";
+import { getItemCount } from "../util";
 
 export default function Header() {
+   const cartItems = useSelector((state) => state.cart?.value);
+   const count = getItemCount(cartItems);
+   console.log(count)
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -11,7 +16,7 @@ export default function Header() {
         </Typography>
         <Box sx={{display:{ md:"flex" }}}>
         <IconButton size="large" aria-label="shopping cart" color="inherit">
-          <Badge badgeContent={1} color="error">
+          <Badge badgeContent={count} color="error">
             <ShoppingCartSharpIcon />
           </Badge>
         </IconButton>
