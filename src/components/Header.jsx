@@ -1,27 +1,28 @@
-import {
-  AppBar,
-  Badge,
-  Box,
-  Button,
-  IconButton,
-  styled,
-  Toolbar,
-  Typography,
-} from "@mui/material";
 import React from "react";
+import AppBar from "@mui/material/AppBar";
+import { Toolbar } from "@mui/material";
+import { Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
+import { Badge } from "@mui/material";
 import ShoppingCartSharpIcon from "@mui/icons-material/ShoppingCartSharp";
-import { useDispatch, useSelector } from "react-redux";
+import { Box } from "@mui/material";
+import { Button } from "@mui/material";
+import { useSelector } from "react-redux";
 import { getItemCount } from "../util";
-import { alpha } from "@mui/material";
+import { styled, alpha } from "@mui/material/styles";
 import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import { useDispatch } from "react-redux";
 import { fetchAllCategories } from "../feature/categories-slice";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+
+
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -36,6 +37,34 @@ const Search = styled("section")(({ theme }) => ({
   width: "100%",
 }));
 
+const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
+  color: "inherit",
+  width: "90%",
+  "& >MuiTextField-root": {
+    paddingRight: `calc(1em + ${theme.spacing(4)})`,
+  },
+  "& .MuiInputBase-input": {
+    color: theme.palette.common.white,
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    border: "none",
+  },
+  "& .MuiSvgIcon-root": {
+    fill: theme.palette.common.white,
+  },
+}));
+
+const SearchIconWrapper = styled("section")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  right: 0,
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
 function SearchBar() {
   const products = useSelector((state) => state?.products.value);
   const categories = useSelector((state) => state?.categories.value);
@@ -43,11 +72,12 @@ function SearchBar() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const searchTerm = searchParams.get("searchTerm");
   const navigate = useNavigate();
 
-  useEffect(()=>{
+  useEffect(() => {
     setSelectedCategory(category ? category : "all");
-  },[category])
+  }, [category]);
 
   if (!categories.length) {
     dispatch(fetchAllCategories());
@@ -55,8 +85,24 @@ function SearchBar() {
 
   function handleCategoryChange(event) {
     const { value } = event.target;
-    setSelectedCategory(value);
-    navigate(value === "all" ? "/" : `/?category=${value}`);
+    navigate(
+      value === "all"
+        ? "/"
+        : `/?category=${value}${searchTerm ? "&searchTerm=" + searchTerm : ""}`
+    );
+  }
+  function handleSearchChange(searchText) {
+    if (searchText) {
+      navigate(
+        selectedCategory === "all"
+          ? `?searchterm=${searchText}`
+          : `/?category=${selectedCategory}&searchterm=${searchText}`
+      );
+    } else {
+      navigate(
+        selectedCategory === "all" ? `/` : `/?category=${selectedCategory}`
+      );
+    }
   }
   return (
     <Search>
@@ -66,7 +112,19 @@ function SearchBar() {
         sx={{
           m: 1,
           textTransform: "capitalize",
-          "&": {},
+          "&": {
+            "::before": {
+              ":hover": {
+                border: "none",
+              },
+            },
+            "::before, &::after": {
+              border: "none",
+            },
+            ".MuiSelect-standard, .MuiSelect-icon": {
+              color: "common.white",
+            },
+          },
         }}
         variant="standard"
         labelId="selected-category"
@@ -86,16 +144,27 @@ function SearchBar() {
           </MenuItem>
         ))}
       </Select>
-      <Autocomplete
+      <StyleAutocomplete
+        freeSolo
+        id="selected-product"
+        onChange={(e, value) => {
+          handleSearchChange(value?.label);
+        }}
         disablePortal
-        id="combo-box-demo"
-        options={Array.from(products, (prod) => ({
-          id: prod.id,
-          label: prod.title,
-        }))}
-        sx={{ width: 300 }}
+        options={Array.from(
+          selectedCategory === "all"
+            ? products
+            : products.filter((prod) => prod.category == selectedCategory),
+          (prod) => ({
+            id: prod.id,
+            label: prod.title,
+          })
+        )}
         renderInput={(params) => <TextField {...params} />}
       />
+      <SearchIconWrapper>
+        <SearchIcon />
+      </SearchIconWrapper>
     </Search>
   );
 }
@@ -106,7 +175,7 @@ export default function Header() {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6" color="inherit">
+        <Typography variant="h6" color="inherit" sx={{ paddingRight: 3 }}>
           E-commerce
         </Typography>
         <SearchBar />

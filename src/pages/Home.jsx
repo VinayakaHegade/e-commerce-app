@@ -20,6 +20,7 @@ import { fetchAllProducts } from "../feature/products-slice";
 export default function Home() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
+  const searchTerm = searchParams.get("searchterm");
   const theme = useTheme();
   const state = useSelector((state) => state.products);
   const { value: products, loading } = state ?? {};
@@ -37,6 +38,12 @@ export default function Home() {
     category && category !== "all"
       ? products.filter((prod) => prod.category === category)
       : products;
+
+  filteredProducts = searchTerm
+    ? filteredProducts.filter((prod) =>
+        prod.title.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : filteredProducts;
 
   return (
     <Container sx={{ py: 8 }} maxWidth="lg">
