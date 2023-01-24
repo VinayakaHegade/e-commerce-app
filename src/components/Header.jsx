@@ -19,10 +19,9 @@ import { fetchAllCategories } from "../feature/categories-slice";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-
-
+import { Link } from "react-router-dom";
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -39,18 +38,23 @@ const Search = styled("section")(({ theme }) => ({
 
 const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
   color: "inherit",
-  width: "90%",
+  width: "100%",
   "& >MuiTextField-root": {
     paddingRight: `calc(1em + ${theme.spacing(4)})`,
   },
   "& .MuiInputBase-input": {
     color: theme.palette.common.white,
+    marginRight: `calc(1em + ${theme.spacing(3)})`,
   },
   "& .MuiOutlinedInput-notchedOutline": {
     border: "none",
   },
   "& .MuiSvgIcon-root": {
     fill: theme.palette.common.white,
+  },
+  "& .MuiAutocomplete-clearIndicator": {
+    fontSize: "larger",
+    marginRight: `calc(1em + ${theme.spacing(3)})`,
   },
 }));
 
@@ -63,6 +67,11 @@ const SearchIconWrapper = styled("section")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+}));
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  color: theme.palette.common.white,
+  textDecoration: "none",
 }));
 
 function SearchBar() {
@@ -172,15 +181,24 @@ function SearchBar() {
 export default function Header() {
   const cartItems = useSelector((state) => state.cart?.value);
   const count = getItemCount(cartItems);
+  const navigate = useNavigate();
+  function navigateToCart() {
+    navigate("/cart");
+  }
   return (
-    <AppBar position="sticky">
-      <Toolbar>
-        <Typography variant="h6" color="inherit" sx={{ paddingRight: 3 }}>
-          E-commerce
+    <AppBar position="sticky" sx={{ py: 1 }}>
+      <Toolbar sx={{ display: "flex", gap: 2 }}>
+        <Typography variant="h6" color="inherit">
+          <StyledLink to="/">Shopz</StyledLink>
         </Typography>
         <SearchBar />
         <Box sx={{ display: { md: "flex" } }}>
-          <IconButton size="large" aria-label="shopping cart" color="inherit">
+          <IconButton
+            onClick={navigateToCart}
+            size="large"
+            aria-label="shopping cart"
+            color="inherit"
+          >
             <Badge badgeContent={count} color="error">
               <ShoppingCartSharpIcon />
             </Badge>
