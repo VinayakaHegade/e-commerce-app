@@ -14,7 +14,7 @@ import {
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { addTocart } from "../feature/cart-slice";
+import { addToCart } from "../feature/cart-slice";
 import { fetchAllProducts } from "../feature/products-slice";
 
 export default function Home() {
@@ -31,7 +31,7 @@ export default function Home() {
   }
 
   function addProductToCart(product) {
-    dispatch(addTocart({ product, quantity: 1 }));
+    dispatch(addToCart({ product, quantity: 1 }));
   }
 
   let filteredProducts =

@@ -1,7 +1,7 @@
 import React from "react";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import {
@@ -14,11 +14,34 @@ import {
 } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { getSubtotal } from "../util";
+import { addToCart } from "../feature/cart-slice";
+import { removeFromCart } from "../feature/cart-slice";
+import { useNavigate } from "react-router-dom";
 
 export default function Cart() {
   const cart = useSelector((state) => state?.cart.value);
   const theme = useTheme();
-  const subtotal = getSubtotal(cart);
+  const subtotal = getSubtotal(cart)?.toFixed(2);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  function updateQuantity(e, { product, quantity }) {
+    const updatedQuantity = e.target.valueAsNumber;
+    if (updatedQuantity < quantity) {
+      dispatch(removeFromCart({ product }));
+    } else {
+      dispatch(addToCart({ product }));
+    }
+  }
+
+  function goToCheckout() {
+    navigate("/checkout");
+  }
+
+  function goToHome() {
+    navigate("/");
+  }
+
   return (
     <Container sx={{ py: 8 }}>
       <Grid container spacing={2}>
@@ -69,12 +92,15 @@ export default function Cart() {
                           variant="standard"
                           label="Quantity"
                           value={quantity}
+                          onChange={(e) =>
+                            updateQuantity(e, { product, quantity })
+                          }
                         ></TextField>
                       </form>
                     </Box>
                     <Box>
                       <Typography variant="h5" paragraph>
-                        {"$" + getSubtotal([{ product, quantity }])}
+                        {"$" + getSubtotal([{ product, quantity }])?.toFixed(2)}
                       </Typography>
                     </Box>
                   </CardContent>
@@ -101,9 +127,13 @@ export default function Cart() {
               <Typography>Subtotal</Typography>
               <Typography>{"$" + subtotal}</Typography>
               {subtotal > 0 ? (
-                <Button variant="contained">Buy Now</Button>
+                <Button variant="contained" onClick={goToCheckout}>
+                  Buy Now
+                </Button>
               ) : (
-                <Button variant="contained">Shop Products</Button>
+                <Button variant="contained" onClick={goToHome}>
+                  Shop Products
+                </Button>
               )}
             </Card>
           </Box>
