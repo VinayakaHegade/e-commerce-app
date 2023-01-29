@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
+import { useAuth } from "../firebase/Auth";
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -182,9 +183,12 @@ export default function Header() {
   const cartItems = useSelector((state) => state.cart?.value);
   const count = getItemCount(cartItems);
   const navigate = useNavigate();
+  const { user } = useAuth();
+
   function navigateToCart() {
     navigate("/cart");
   }
+
   return (
     <AppBar position="sticky" sx={{ py: 1 }}>
       <Toolbar sx={{ display: "flex", gap: 2 }}>
@@ -204,7 +208,15 @@ export default function Header() {
             </Badge>
           </IconButton>
         </Box>
-        <Button color="inherit">Login</Button>
+        <Box flexBasis={300}>
+          {user ? (
+            <Button color="inherit">
+              Hello, {user.displayName ?? user.email}
+            </Button>
+          ) : (
+            <Button color="inherit">Login</Button>
+          )}
+        </Box>
       </Toolbar>
     </AppBar>
   );
