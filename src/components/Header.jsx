@@ -1,6 +1,6 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import { Toolbar } from "@mui/material";
+import { Menu, Toolbar } from "@mui/material";
 import { Typography } from "@mui/material";
 import { IconButton } from "@mui/material";
 import { Badge } from "@mui/material";
@@ -23,6 +23,8 @@ import { useSearchParams } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 import { useAuth } from "../firebase/Auth";
+import "../App.css";
+import { signOut } from "firebase/auth";
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -55,7 +57,7 @@ const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
   },
   "& .MuiAutocomplete-clearIndicator": {
     fontSize: "larger",
-    marginRight: `calc(1em + ${theme.spacing(3)})`,
+    marginRight: `calc(1em + ${theme.spacing(2)})`,
   },
 }));
 
@@ -93,6 +95,10 @@ function SearchBar() {
     dispatch(fetchAllCategories());
   }
 
+  if (!categories.length) {
+    dispatch(fetchAllCategories());
+  }
+
   function handleCategoryChange(event) {
     const { value } = event.target;
     navigate(
@@ -101,6 +107,7 @@ function SearchBar() {
         : `/?category=${value}${searchTerm ? "&searchTerm=" + searchTerm : ""}`
     );
   }
+
   function handleSearchChange(searchText) {
     if (searchText) {
       navigate(
@@ -114,6 +121,7 @@ function SearchBar() {
       );
     }
   }
+
   return (
     <Search>
       <Select
@@ -180,44 +188,85 @@ function SearchBar() {
 }
 
 export default function Header() {
+  const { user, signOut } = useAuth();
   const cartItems = useSelector((state) => state.cart?.value);
   const count = getItemCount(cartItems);
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const userName = user?.email.substring(0, user?.email.lastIndexOf("@"));
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isMenuOpen = Boolean(anchorEl);
 
   function navigateToCart() {
     navigate("/cart");
   }
 
+  function handleProfileMenuOpen(event) {
+    setAnchorEl(event.currentTarget);
+  }
+
+  function handleMenuClose() {
+    setAnchorEl(null);
+  }
+
+  function handleLogin() {
+    navigate("/login");
+  }
+
+  async function logout() {
+    await signOut();
+    navigate("/login");
+  }
+
+  const renderMenu = (
+    <Menu
+      anchorEl={anchorEl}
+      id="user-profile-menu"
+      keepMounted
+      transformOrigin={{ horizontal: "right", vertical: "top" }}
+      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMenuClose}>My Account</MenuItem>
+      <MenuItem onClick={logout}>Logout</MenuItem>
+    </Menu>
+  );
+
   return (
-    <AppBar position="sticky" sx={{ py: 1 }}>
-      <Toolbar sx={{ display: "flex", gap: 2 }}>
-        <Typography variant="h6" color="inherit">
-          <StyledLink to="/">Shopz</StyledLink>
-        </Typography>
-        <SearchBar />
-        <Box sx={{ display: { md: "flex" } }}>
-          <IconButton
-            onClick={navigateToCart}
-            size="large"
-            aria-label="shopping cart"
-            color="inherit"
-          >
-            <Badge badgeContent={count} color="error">
-              <ShoppingCartSharpIcon />
-            </Badge>
-          </IconButton>
-        </Box>
-        <Box flexBasis={300}>
-          {user ? (
-            <Button color="inherit">
-              Hello, {user.displayName ?? user.email}
-            </Button>
-          ) : (
-            <Button color="inherit">Login</Button>
-          )}
-        </Box>
-      </Toolbar>
-    </AppBar>
+    <>
+      <AppBar position="sticky" sx={{ py: 1 }}>
+        <Toolbar sx={{ display: "flex", gap: 2 }}>
+          <Typography variant="h6" color="inherit">
+            <StyledLink to="/">Shopz</StyledLink>
+          </Typography>
+          <SearchBar />
+          <Box sx={{ display: { md: "flex" } }}>
+            <IconButton
+              onClick={navigateToCart}
+              size="large"
+              aria-label="shopping cart"
+              color="inherit"
+            >
+              <Badge badgeContent={count} color="error">
+                <ShoppingCartSharpIcon />
+              </Badge>
+            </IconButton>
+          </Box>
+          <Box flexBasis={250}>
+            {user ? (
+              <Button onClick={handleProfileMenuOpen} color="inherit">
+                Hello, {user.displayName ?? userName}
+              </Button>
+            ) : (
+              <Button onClick={handleLogin} color="inherit">
+                Login
+              </Button>
+            )}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      {renderMenu}
+    </>
   );
 }

@@ -8,6 +8,7 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
   updateProfile,
 } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -39,7 +40,7 @@ export const useAuth = () => useContext(AuthContext);
 function useProvideAuth() {
   const [user, setUser] = useState();
 
-  const signUp = (email, Password, displayName) => {
+  const signUp = (email, Password, displayName) =>
     createUserWithEmailAndPassword(auth, email, Password, displayName).then(
       ({ user }) => {
         updateProfile(user, { displayName });
@@ -47,20 +48,14 @@ function useProvideAuth() {
         return user;
       }
     );
-  };
 
-  const signIn = (email, password) => {
+  const signIn = (email, password) =>
     signInWithEmailAndPassword(auth, email, password).then(({ user }) => {
       setUser(user);
       return user;
     });
-  };
 
-  const signOutUser = (auth) => {
-    signOut(auth).then(() => {
-      setUser(null);
-    });
-  };
+  const signOutUser = () => signOut(auth).then(() => setUser(null));
 
   useEffect(() => {
     const unsubscribe = () =>

@@ -10,7 +10,16 @@ import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import store from "./store";
-import AuthProvider from "./firebase/Auth";
+import AuthProvider, { useAuth } from "./firebase/Auth";
+import { Navigate } from "react-router-dom";
+
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to={"/login"} />;
+  }
+  return children;
+}
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,7 +27,15 @@ const router = createBrowserRouter(
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
         <Route path="/cart" index element={<Cart />} />
-        <Route path="/checkout" index element={<Checkout />} />
+        <Route
+          path="/checkout"
+          index
+          element={
+            <ProtectedRoute>
+              <Checkout />
+            </ProtectedRoute>
+          }
+        />
       </Route>
       <Route path="/login" index element={<Login />} />
     </>

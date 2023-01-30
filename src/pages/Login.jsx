@@ -11,8 +11,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const theme = useTheme();
-  const { signIn } = useAuth();
   const navigate = useNavigate();
+  const { signIn } = useAuth();
 
   async function login(event) {
     event.preventDefault();
