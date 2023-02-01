@@ -1,13 +1,14 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
-import { Menu, Toolbar } from "@mui/material";
-import { Typography } from "@mui/material";
-import { IconButton } from "@mui/material";
-import { Badge } from "@mui/material";
+import Menu from "@mui/material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Badge from "@mui/material/Badge";
 import ShoppingCartSharpIcon from "@mui/icons-material/ShoppingCartSharp";
-import { Box } from "@mui/material";
-import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import { useSelector } from "react-redux/";
 import { getItemCount } from "../util";
 import { styled, alpha } from "@mui/material/styles";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -24,7 +25,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Link } from "react-router-dom";
 import { useAuth } from "../firebase/Auth";
 import "../App.css";
-import { signOut } from "firebase/auth";
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -78,8 +78,8 @@ const StyledLink = styled(Link)(({ theme }) => ({
 }));
 
 function SearchBar() {
-  const products = useSelector((state) => state?.products.value);
-  const categories = useSelector((state) => state?.categories.value);
+  const products = useSelector((state) => state?.products?.value);
+  const categories = useSelector((state) => state?.categories?.value);
   const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchParams] = useSearchParams();
@@ -88,16 +88,14 @@ function SearchBar() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!categories.length) {
+      dispatch(fetchAllCategories());
+    }
+  }, []);
+
+  useEffect(() => {
     setSelectedCategory(category ? category : "all");
   }, [category]);
-
-  if (!categories.length) {
-    dispatch(fetchAllCategories());
-  }
-
-  if (!categories.length) {
-    dispatch(fetchAllCategories());
-  }
 
   function handleCategoryChange(event) {
     const { value } = event.target;

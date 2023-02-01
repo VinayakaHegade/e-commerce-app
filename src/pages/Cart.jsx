@@ -3,15 +3,13 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "@mui/material/Card";
+import useTheme from "@mui/material/styles/useTheme";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import {
-  Box,
-  Button,
-  CardContent,
-  Rating,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { getSubtotal } from "../util";
 import { addToCart } from "../feature/cart-slice";

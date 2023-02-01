@@ -1,17 +1,15 @@
-import { useTheme } from "@emotion/react";
-import { ShoppingCartSharp } from "@mui/icons-material";
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Container,
-  Grid,
-  Rating,
-  Typography,
-} from "@mui/material";
 import React from "react";
+import { useTheme } from "@emotion/react";
+import ShoppingCartSharp from "@mui/icons-material/ShoppingCartSharp";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { addToCart } from "../feature/cart-slice";
@@ -67,7 +65,6 @@ export default function Home() {
                     height: theme.spacing(30),
                     pt: theme.spacing(),
                     objectFit: "contain",
-
                   }}
                   image={image}
                   alt={title}

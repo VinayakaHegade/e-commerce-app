@@ -1,11 +1,15 @@
 import React from "react";
-import { Button, TextField, useTheme } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import useTheme from "@mui/material/styles/useTheme";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Grid from "@mui/material/Grid";
+import Link from "@mui/material/Link";
 import { useAuth } from "../firebase/Auth";
 import { useNavigate } from "react-router-dom";
 
@@ -71,6 +75,13 @@ export default function Login() {
             Sign In
           </Button>
         </form>
+        <Grid container justifyContent={"flex-end"}>
+          <Grid item>
+            <Link variant="body2" href="/register">
+              New user? Sign up
+            </Link>
+          </Grid>
+        </Grid>
       </Box>
     </Container>
   );
