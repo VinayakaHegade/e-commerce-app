@@ -9,8 +9,20 @@ import Typography from "@mui/material/Typography";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
+import { useAuth } from "../firebase/Auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
+  async function registerUser(event) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log(data.get("email"), data.get("password"), data.get("name"));
+    console.log(data);
+    await signUp(data.get("email"), data.get("password"), data.get("name"));
+    navigate("/login");
+  }
   return (
     <Container component={"main"} maxWidth="xs">
       <CssBaseline />
@@ -28,7 +40,7 @@ export default function Register() {
         <Typography component={"h1"} variant="h5">
           Sign Up
         </Typography>
-        <Box component={"form"} sx={{ mt: 3 }}>
+        <Box component={"form"} sx={{ mt: 3 }} onSubmit={registerUser}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
@@ -44,7 +56,7 @@ export default function Register() {
             <Grid item xs={12}>
               <TextField
                 id="email"
-                name="Email"
+                name="email"
                 label="Email"
                 autoComplete="email"
                 fullWidth
@@ -56,14 +68,20 @@ export default function Register() {
                 id="password"
                 name="password"
                 label="Password"
+                type={"password"}
                 autoComplete="new-password"
                 fullWidth
                 required
               ></TextField>
             </Grid>
           </Grid>
-          <Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Sign Up
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Register
           </Button>
           <Grid container justifyContent={"flex-end"}>
             <Grid item>
