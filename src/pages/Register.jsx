@@ -18,8 +18,6 @@ export default function Register() {
   async function registerUser(event) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log(data.get("email"), data.get("password"), data.get("name"));
-    console.log(data);
     await signUp(data.get("email"), data.get("password"), data.get("name"));
     navigate("/login");
   }
