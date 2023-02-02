@@ -14,13 +14,13 @@ import AuthProvider, { useAuth } from "./firebase/Auth";
 import { Navigate } from "react-router-dom";
 import Register from "./pages/Register";
 
-// function ProtectedRoute({ children }) {
-//   const { user } = useAuth();
-//   if (!user) {
-//     return <Navigate to={"/login"} />;
-//   }
-//   return children;
-// }
+function ProtectedRoute({ children }) {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to={"/login"} />;
+  }
+  return children;
+}
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,9 +32,9 @@ const router = createBrowserRouter(
           path="/checkout"
           index
           element={
-            // <ProtectedRoute>
-            // </ProtectedRoute>
+            <ProtectedRoute>
               <Checkout />
+            </ProtectedRoute>
           }
         />
       </Route>
