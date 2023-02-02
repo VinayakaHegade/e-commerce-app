@@ -9,9 +9,9 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Grid from "@mui/material/Grid";
-import Link from "@mui/material/Link";
 import { useAuth } from "../firebase/Auth";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const theme = useTheme();
@@ -77,7 +77,7 @@ export default function Login() {
         </form>
         <Grid container justifyContent={"flex-end"}>
           <Grid item>
-            <Link variant="body2" href="/register">
+            <Link variant="body2" to="/register">
               New user? Sign up
             </Link>
           </Grid>
