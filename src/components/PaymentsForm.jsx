@@ -16,7 +16,7 @@ export default function PaymentsForm() {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Payment Method
+        Payment Details
       </Typography>
       <Box component="form" onChange={handleChange}>
         <Grid container spacing={{ xs: 2, md: 3 }}>
@@ -29,6 +29,7 @@ export default function PaymentsForm() {
               label="Name on card"
               fullWidth
               autoComplete="cc-name"
+              defaultValue={payment.name ?? ""}
             ></TextField>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -40,6 +41,7 @@ export default function PaymentsForm() {
               label="Card Number"
               fullWidth
               autoComplete="cc-number"
+              defaultValue={payment.cardNumber ?? ""}
             ></TextField>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -51,6 +53,7 @@ export default function PaymentsForm() {
               label="Expiry Date"
               fullWidth
               autoComplete="cc-exp"
+              defaultValue={payment.expDate ?? ""}
             ></TextField>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -63,6 +66,7 @@ export default function PaymentsForm() {
               type="password"
               fullWidth
               autoComplete="cc-csc"
+              defaultValue={payment.cvv ?? ""}
             ></TextField>
           </Grid>
         </Grid>
