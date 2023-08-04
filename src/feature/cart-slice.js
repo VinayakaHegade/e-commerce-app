@@ -6,6 +6,15 @@ export const cartSlice = createSlice({
     value: [],
   },
   reducers: {
+    setQuantity(state, action) {
+      const { product, quantity } = action.payload;
+      const index = state.value.findIndex(
+        ({ product: prod }) => prod.id === product.id
+      );
+      if (index !== -1) {
+        state.value[index].quantity = quantity;
+      }
+    },
     addToCart(state, action) {
       const { product, quantity = 1 } = action.payload;
       const existingItem = state.value.find(
@@ -37,6 +46,6 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, clearCart, setQuantity } = cartSlice.actions;
 
 export default cartSlice.reducer;

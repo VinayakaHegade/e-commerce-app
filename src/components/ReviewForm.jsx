@@ -1,14 +1,12 @@
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
-import React from "react";
-import TextField from "@mui/material/TextField";
-import { useDispatch, useSelector } from "react-redux";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
+import React from "react";
+import { useSelector } from "react-redux";
 import { getSubtotal } from "../util";
-import { useTheme } from "@mui/material";
 
 export default function ReviewForm() {
   const cart = useSelector((state) => state.cart?.value);
@@ -42,8 +40,8 @@ export default function ReviewForm() {
         Order Summary
       </Typography>
       <List disablePadding>
-        {cart?.map(({ product, quantity }) => (
-          <ListItem key={product.title} sx={{ py: 1, px: 0 }}>
+        {cart?.map(({ product, quantity }, index) => (
+          <ListItem key={index} sx={{ py: 1, px: 0 }}>
             <ListItemText
               sx={{
                 "& .MuiListItemText-primary": {

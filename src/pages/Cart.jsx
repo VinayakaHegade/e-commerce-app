@@ -8,13 +8,15 @@ import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import TextField from "@mui/material/TextField";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import { getSubtotal } from "../util";
-import { addToCart } from "../feature/cart-slice";
-import { removeFromCart } from "../feature/cart-slice";
+import { setQuantity, removeFromCart } from "../feature/cart-slice";
 import { useNavigate } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 export default function Cart() {
   const cart = useSelector((state) => state?.cart.value);
@@ -23,14 +25,17 @@ export default function Cart() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  function updateQuantity(e, { product, quantity }) {
-    const updatedQuantity = e.target.valueAsNumber;
-    if (updatedQuantity < quantity) {
-      dispatch(removeFromCart({ product }));
-    } else {
-      dispatch(addToCart({ product }));
-    }
+function handleDecreaseQuantity(product, quantity) {
+  if (quantity === 1) {
+    dispatch(removeFromCart({ product }));
+  } else {
+    dispatch(setQuantity({ product, quantity: quantity - 1 }));
   }
+}
+
+function handleIncreaseQuantity(product, quantity) {
+  dispatch(setQuantity({ product, quantity: quantity + 1 }));
+}
 
   function goToCheckout() {
     navigate("/checkout");
@@ -78,23 +83,30 @@ export default function Cart() {
                     >
                       <Typography variant="h6">{title}</Typography>
                       <Rating readOnly precision={0.5} value={rating.rate} />
-                      <form>
-                        <TextField
-                          sx={{ width: theme.spacing(8) }}
-                          inputProps={{
-                            min: 0,
-                            max: 10,
-                          }}
-                          id={`${id}-product-id`}
-                          type="number"
-                          variant="standard"
-                          label="Quantity"
-                          value={quantity}
-                          onChange={(e) =>
-                            updateQuantity(e, { product, quantity })
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
+                      >
+                        <IconButton
+                          onClick={() =>
+                            handleDecreaseQuantity(product, quantity)
                           }
-                        ></TextField>
-                      </form>
+                        >
+                          {quantity === 1 ? <DeleteIcon /> : <RemoveIcon />}
+                        </IconButton>
+                        <Typography>{quantity}</Typography>
+                        <IconButton
+                          onClick={() =>
+                            handleIncreaseQuantity(product, quantity)
+                          }
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </Box>
                     </Box>
                     <Box>
                       <Typography variant="h5" paragraph>
