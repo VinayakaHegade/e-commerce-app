@@ -247,7 +247,15 @@ export default function Header() {
             justifyContent: "space-around",
           }}
         >
-          <Typography variant="h6" color="inherit">
+          <Typography
+            variant="h6"
+            color="inherit"
+            sx={{
+              "@media (max-width: 768px)": {
+                marginRight: "auto",
+              },
+            }}
+          >
             <StyledLink to="/">Shopz</StyledLink>
           </Typography>
 
