@@ -1,30 +1,35 @@
-import React from "react";
-import AppBar from "@mui/material/AppBar";
-import Menu from "@mui/material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
+import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartSharpIcon from "@mui/icons-material/ShoppingCartSharp";
+import AppBar from "@mui/material/AppBar";
+import Autocomplete from "@mui/material/Autocomplete";
+import Badge from "@mui/material/Badge";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { useSelector } from "react-redux/";
-import { getItemCount } from "../util";
-import { styled, alpha } from "@mui/material/styles";
-import Autocomplete from "@mui/material/Autocomplete";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import { alpha, styled } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchAllCategories } from "../feature/categories-slice";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
-import { Link } from "react-router-dom";
-import { useAuth } from "../firebase/Auth";
+import { useSelector } from "react-redux/";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "../App.css";
+import { fetchAllCategories } from "../feature/categories-slice";
+import { useAuth } from "../firebase/Auth";
+import { getItemCount } from "../util";
+
+const SearchWrapper = styled("section")(() => ({
+  width: "100%",
+  flexBasis: "900px",
+
+  "@media (max-width: 768px)": {
+    display: "none",
+  },
+}));
 
 const Search = styled("section")(({ theme }) => ({
   position: "relative",
@@ -34,9 +39,7 @@ const Search = styled("section")(({ theme }) => ({
   "&hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginRight: theme.spacing(2),
   marginLeft: 0,
-  width: "100%",
 }));
 
 const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
@@ -77,7 +80,7 @@ const StyledLink = styled(Link)(({ theme }) => ({
   textDecoration: "none",
 }));
 
-function SearchBar() {
+export function SearchBar() {
   const products = useSelector((state) => state?.products?.value);
   const categories = useSelector((state) => state?.categories?.value);
   const dispatch = useDispatch();
@@ -234,12 +237,25 @@ export default function Header() {
   return (
     <>
       <AppBar position="sticky" sx={{ py: 1 }}>
-        <Toolbar sx={{ display: "flex", gap: 2 }}>
+        <Toolbar
+          sx={{
+            display: "flex",
+            gap: 4,
+            width: "100%",
+            maxWidth: "1920px",
+            margin: "0px auto",
+            justifyContent: "space-around",
+          }}
+        >
           <Typography variant="h6" color="inherit">
             <StyledLink to="/">Shopz</StyledLink>
           </Typography>
-          <SearchBar />
-          <Box sx={{ display: { md: "flex" } }}>
+
+          <SearchWrapper>
+            <SearchBar />
+          </SearchWrapper>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <IconButton
               onClick={navigateToCart}
               size="large"
@@ -250,17 +266,17 @@ export default function Header() {
                 <ShoppingCartSharpIcon />
               </Badge>
             </IconButton>
-          </Box>
-          <Box flexBasis={250}>
-            {user ? (
-              <Button onClick={handleProfileMenuOpen} color="inherit">
-                Hello, {user.displayName ?? userName}
-              </Button>
-            ) : (
-              <Button onClick={handleLogin} color="inherit">
-                Login
-              </Button>
-            )}
+            <Box>
+              {user ? (
+                <Button onClick={handleProfileMenuOpen} color="inherit">
+                  Hello, {user.displayName ?? userName}
+                </Button>
+              ) : (
+                <Button onClick={handleLogin} color="inherit">
+                  Login
+                </Button>
+              )}
+            </Box>
           </Box>
         </Toolbar>
       </AppBar>
