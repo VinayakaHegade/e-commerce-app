@@ -19,6 +19,8 @@ export default function Home() {
   const [searchParams] = useSearchParams();
   const category = searchParams.get("category");
   const searchTerm = searchParams.get("searchterm");
+  const minPrice = searchParams.get("min");
+  const maxPrice = searchParams.get("max");
   const theme = useTheme();
   const state = useSelector((state) => state.products);
   const { value: products, loading } = state ?? {};
@@ -43,8 +45,15 @@ export default function Home() {
       )
     : filteredProducts;
 
+  filteredProducts =
+    minPrice || maxPrice
+      ? filteredProducts.filter(
+          (prod) => prod.price >= minPrice && prod.price <= maxPrice
+        )
+      : filteredProducts;
+
   return (
-    <Container sx={{ pb: 8, pt:4 }} maxWidth="lg">
+    <Container sx={{ pb: 8, pt: 4 }} maxWidth="lg">
       <Grid container spacing={4}>
         {filteredProducts?.map(
           ({ title, id, price, description, rating, image }) => (

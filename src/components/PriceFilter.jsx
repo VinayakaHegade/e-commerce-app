@@ -1,18 +1,36 @@
 import { InputAdornment, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Slider from "@mui/material/Slider";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 function valuetext(value) {
   return `$${value}`;
 }
 
 const PriceFilter = () => {
-  const [value, setValue] = useState([0, 630]);
+  const [value, setValue] = useState([0]);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const category = searchParams.get("category");
+  const searchTerm = searchParams.get("searchTerm");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const handlePriceFilterApply = () => {
+    if (value.length === 1 && value[0] === 0) {
+      navigate("/");
+    } else {
+      navigate(
+        `/?min=${value[0]}&max=${value[1]}${
+          category ? "&category=" + category : ""
+        }${searchTerm ? "&searchTerm=" + searchTerm : ""}`
+      );
+    }
   };
 
   const handleMinimumInputChange = (event) => {
@@ -39,10 +57,13 @@ const PriceFilter = () => {
         padding: "16px 32px 48px",
         "@media (max-width: 768px)": {
           top: "56px",
+          padding: "16px 16px 48px",
         },
       }}
     >
-      <Typography variant="h5">Filter By Price</Typography>
+      <Typography variant="h5" sx={{ textAlign: "center" }}>
+        Filter By Price
+      </Typography>
       <Box
         sx={{
           mt: "16px",
@@ -65,32 +86,58 @@ const PriceFilter = () => {
           getAriaValueText={valuetext}
           sx={{ maxWidth: 600 }}
         />
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <TextField
-            value={value[0]}
-            label="Minimum"
-            size="small"
-            variant="outlined"
-            onChange={handleMinimumInputChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            "@media (max-width: 480px)": {
+              flexWrap: "wrap",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
             }}
-          />
+          >
+            <TextField
+              value={value[0]}
+              type="number"
+              label="Minimum"
+              size="small"
+              variant="outlined"
+              onChange={handleMinimumInputChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+              }}
+            />
 
-          <TextField
-            value={value[1]}
-            label="Maximum"
+            <TextField
+              value={value[1]}
+              type="number"
+              label="Maximum"
+              size="small"
+              variant="outlined"
+              onChange={handleMaximumInputChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">$</InputAdornment>
+                ),
+              }}
+            />
+          </Box>
+          <Button
+            onClick={handlePriceFilterApply}
+            variant="contained"
+            disableElevation
             size="small"
-            variant="outlined"
-            onChange={handleMaximumInputChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
-            }}
-          />
+            sx={{ flexShrink: 0 }}
+          >
+            Apply Filter
+          </Button>
         </Box>
       </Box>
     </Box>
