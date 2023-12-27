@@ -25,7 +25,6 @@ import { getItemCount } from "../util";
 const SearchWrapper = styled("section")(() => ({
   width: "100%",
   flexBasis: "900px",
-
   "@media (max-width: 768px)": {
     display: "none",
   },
@@ -39,7 +38,6 @@ const Search = styled("section")(({ theme }) => ({
   "&hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-  marginLeft: 0,
 }));
 
 const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
@@ -236,7 +234,7 @@ export default function Header() {
 
   return (
     <>
-      <AppBar position="sticky" sx={{ py: 1 }}>
+      <AppBar position="sticky" sx={{ py: 1, boxShadow:"none" }}>
         <Toolbar
           sx={{
             display: "flex",

@@ -1,4 +1,3 @@
-import React from "react";
 import { useTheme } from "@emotion/react";
 import ShoppingCartSharp from "@mui/icons-material/ShoppingCartSharp";
 import Button from "@mui/material/Button";
@@ -10,6 +9,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { addToCart } from "../feature/cart-slice";
@@ -44,7 +44,7 @@ export default function Home() {
     : filteredProducts;
 
   return (
-    <Container sx={{ py: 8 }} maxWidth="lg">
+    <Container sx={{ pb: 8, pt:4 }} maxWidth="lg">
       <Grid container spacing={4}>
         {filteredProducts?.map(
           ({ title, id, price, description, rating, image }) => (
