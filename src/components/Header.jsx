@@ -50,6 +50,11 @@ const StyleAutocomplete = styled(Autocomplete)(({ theme }) => ({
     color: theme.palette.common.white,
     marginRight: `calc(1em + ${theme.spacing(3)})`,
   },
+  "@media (max-width: 768px)": {
+    "& .MuiInputBase-input": {
+      backgroundColor: "rgba(255, 255, 255, 0.15)",
+    },
+  },
   "& .MuiOutlinedInput-notchedOutline": {
     border: "none",
   },

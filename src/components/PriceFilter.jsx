@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { InputAdornment, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import Slider from "@mui/material/Slider";
 import TextField from "@mui/material/TextField";
@@ -57,6 +57,7 @@ const PriceFilter = () => {
           max={1000}
           step={200}
           marks
+          size="small"
           getAriaLabel={() => "Price range"}
           value={value}
           onChange={handleChange}
@@ -71,6 +72,11 @@ const PriceFilter = () => {
             size="small"
             variant="outlined"
             onChange={handleMinimumInputChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
           />
 
           <TextField
@@ -79,6 +85,11 @@ const PriceFilter = () => {
             size="small"
             variant="outlined"
             onChange={handleMaximumInputChange}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">$</InputAdornment>
+              ),
+            }}
           />
         </Box>
       </Box>
