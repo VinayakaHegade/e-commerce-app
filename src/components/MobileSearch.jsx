@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { SearchBar } from "./Header";
+import SearchBar from "./SearchBar";
 
 const MobileSearch = () => {
   return (
