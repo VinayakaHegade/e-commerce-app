@@ -14,6 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { addToCart } from "../feature/cart-slice";
 import { fetchAllProducts } from "../feature/products-slice";
+import { Box } from "@mui/material";
+import MobileSearch from "../components/MobileSearch";
+import PriceFilter from "../components/PriceFilter";
 
 export default function Home() {
   const [searchParams] = useSearchParams();
@@ -53,86 +56,90 @@ export default function Home() {
       : filteredProducts;
 
   return (
-    <Container sx={{ pb: 8, pt: 4 }} maxWidth="lg">
-      <Grid container spacing={4}>
-        {filteredProducts?.map(
-          ({ title, id, price, description, rating, image }) => (
-            <Grid item key={id} xs={12} sm={6} md={3}>
-              <Card
-                sx={{
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  padding: theme.spacing(2, 0),
-                }}
-              >
-                <CardMedia
-                  component="img"
+    <Box>
+      <MobileSearch />
+      <PriceFilter />
+      <Container sx={{ pb: 8, pt: 4 }} maxWidth="lg">
+        <Grid container spacing={4}>
+          {filteredProducts?.map(
+            ({ title, id, price, description, rating, image }) => (
+              <Grid item key={id} xs={12} sm={6} md={3}>
+                <Card
                   sx={{
-                    alignSelf: "center",
-                    width: theme.spacing(30),
-                    height: theme.spacing(30),
-                    pt: theme.spacing(),
-                    objectFit: "contain",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    padding: theme.spacing(2, 0),
                   }}
-                  image={image}
-                  alt={title}
-                />
-                <CardContent>
-                  <Typography
-                    variant="h5"
-                    component="h2"
-                    gutterBottom
+                >
+                  <CardMedia
+                    component="img"
                     sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "1",
-                      WebkitBoxOrient: "vertical",
+                      alignSelf: "center",
+                      width: theme.spacing(30),
+                      height: theme.spacing(30),
+                      pt: theme.spacing(),
+                      objectFit: "contain",
                     }}
-                  >
-                    {title}
-                  </Typography>
-                  <Typography
-                    color="text.secondary"
-                    paragraph
-                    sx={{
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                      WebkitBoxOrient: "vertical",
-                    }}
-                  >
-                    {description}
-                  </Typography>
-                  <Typography fontSize="large" paragraph>
-                    ${price}
-                  </Typography>
-                  <Rating readOnly precision={0.5} value={rating.rate} />
-                </CardContent>
-                <CardActions sx={{ alignSelf: "center" }}>
-                  <Button
-                    variant="contained"
-                    onClick={() =>
-                      addProductToCart({
-                        title,
-                        id,
-                        price,
-                        description,
-                        rating,
-                        image,
-                      })
-                    }
-                  >
-                    <ShoppingCartSharp /> Add to cart
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          )
-        )}
-      </Grid>
-    </Container>
+                    image={image}
+                    alt={title}
+                  />
+                  <CardContent>
+                    <Typography
+                      variant="h5"
+                      component="h2"
+                      gutterBottom
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "-webkit-box",
+                        WebkitLineClamp: "1",
+                        WebkitBoxOrient: "vertical",
+                      }}
+                    >
+                      {title}
+                    </Typography>
+                    <Typography
+                      color="text.secondary"
+                      paragraph
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        display: "-webkit-box",
+                        WebkitLineClamp: "2",
+                        WebkitBoxOrient: "vertical",
+                      }}
+                    >
+                      {description}
+                    </Typography>
+                    <Typography fontSize="large" paragraph>
+                      ${price}
+                    </Typography>
+                    <Rating readOnly precision={0.5} value={rating.rate} />
+                  </CardContent>
+                  <CardActions sx={{ alignSelf: "center" }}>
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        addProductToCart({
+                          title,
+                          id,
+                          price,
+                          description,
+                          rating,
+                          image,
+                        })
+                      }
+                    >
+                      <ShoppingCartSharp /> Add to cart
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            )
+          )}
+        </Grid>
+      </Container>
+    </Box>
   );
 }
