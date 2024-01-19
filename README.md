@@ -15,6 +15,9 @@
 
 ## Demo
 [![Ecomm-Shopz](https://img.shields.io/badge/Tryit-(here)-blue.svg)](https://ecomm-shopz.netlify.app)
+
+https://github.com/VinayakaHegade/e-commerce-app/assets/88454618/599ace68-ad21-4ebd-99f3-798f0d896650
+
 ![demo](./public/Ecomm-Product-Listing.png)
 ![demo](./public/Ecomm-Signup.png)
 ![demo](./public/Ecomm-Checkout.png)
