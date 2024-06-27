@@ -1,6 +1,6 @@
 name: Bug Report Form
 description: Use this form to report a bug
-labels: ["bug", "priority"]
+labels: ["bug"]
 body:
   - type: textarea
     id: description
