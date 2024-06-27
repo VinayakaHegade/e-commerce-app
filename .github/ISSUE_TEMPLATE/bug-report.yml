@@ -31,6 +31,12 @@ body:
     validations:
       required: true
 
+  - type: textarea
+    id: screenshots-recordings
+    attributes:
+      label: Screenshots or Recordings
+      description: If applicable, add screenshots or screen recordings to help explain the problem. You can drag and drop images or paste links to recordings here.
+
   - type: checkboxes
     id: confirmation-checklist
     attributes:
